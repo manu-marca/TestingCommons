@@ -9,6 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      NuGetDirectory: ${{ github.workspace}}/nuget
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -19,6 +21,16 @@ jobs:
     - name: Test
       run: dotnet test src/TestingCommons.UnitTests/TestingCommons.UnitTests.csproj -c Release --no-build
     - name: Pack nugets
-      run: dotnet pack src/**/*.csproj -c Release --no-build --output .
+      run: dotnet pack src/TestingCommons.Azure/TestingCommons.Azure.csproj -c Release --no-build --output ${{ env.NuGetDirectory }}
+    - name: Pack nugets
+      run: dotnet pack src/TestingCommons.Core/TestingCommons.Core.csproj -c Release --no-build --output ${{ env.NuGetDirectory }}
+    - name: Pack nugets
+      run: dotnet pack src/TestingCommons.MongoDb/TestingCommons.MongoDb.csproj -c Release --no-build --output ${{ env.NuGetDirectory }}
+    - name: Pack nugets
+      run: dotnet pack src/TestingCommons.NewRelic/TestingCommons.NewRelic.csproj -c Release --no-build --output ${{ env.NuGetDirectory }}
+    - name: Pack nugets
+      run: dotnet pack src/TestingCommons.Reqnroll/TestingCommons.Reqnroll.csproj -c Release --no-build --output ${{ env.NuGetDirectory }}
+    - name: Pack nugets
+      run: dotnet pack src/TestingCommons.RestApiClient/TestingCommons.RestApiClient.csproj -c Release --no-build --output ${{ env.NuGetDirectory }}
     - name: Push to NuGet
       run: dotnet nuget push "*.nupkg" --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json
