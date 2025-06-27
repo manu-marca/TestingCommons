@@ -32,5 +32,9 @@ jobs:
       run: dotnet pack src/TestingCommons.Reqnroll/TestingCommons.Reqnroll.csproj -c Release --no-build --output ${{ env.NuGetDirectory }}
     - name: Pack nugets
       run: dotnet pack src/TestingCommons.RestApiClient/TestingCommons.RestApiClient.csproj -c Release --no-build --output ${{ env.NuGetDirectory }}
-    - name: Push to NuGet
-      run: dotnet nuget push ${{ env.NuGetDirectory }} --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json
+    - name: Publish NuGet package
+      shell: pwsh
+      run: |
+        foreach($file in (Get-ChildItem "${{ env.NuGetDirectory }}" -Recurse -Include *.nupkg)) {
+            dotnet nuget push $file --api-key "${{ secrets.nuget_api_key }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+        }
