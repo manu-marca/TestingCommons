@@ -17,7 +17,7 @@ jobs:
     - name: Build
       run: dotnet build src/TestingCommons.sln -c Release 
     - name: Test
-      run: dotnet test -c Release --no-build
+      run: dotnet test src/TestingCommons.UnitTests/TestingCommons.UnitTests.csproj -c Release --no-build
     - name: Pack nugets
       run: dotnet pack src/TestingCommons/**/*.csproj; !src/TestingCommons/[Tt]ests/**/*.csproj -c Release --no-build --output .
     - name: Push to NuGet
