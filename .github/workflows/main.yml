@@ -31,6 +31,8 @@ jobs:
     - name: Pack nugets
       run: dotnet pack src/TestingCommons.Reqnroll/TestingCommons.Reqnroll.csproj -c Release --no-build --output ${{ env.NuGetDirectory }}
     - name: Pack nugets
+      run: dotnet pack src/TestingCommons.RabbitMq/TestingCommons.RabbitMq.csproj -c Release --no-build --output ${{ env.NuGetDirectory }}
+    - name: Pack nugets
       run: dotnet pack src/TestingCommons.RestApiClient/TestingCommons.RestApiClient.csproj -c Release --no-build --output ${{ env.NuGetDirectory }}
     - name: Publish NuGet package
       shell: pwsh

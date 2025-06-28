@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.36105.23 d17.13
+VisualStudioVersion = 17.13.36105.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingCommons.Core", "TestingCommons.Core\TestingCommons.Core.csproj", "{6F5C47CE-B5DB-4E2B-8307-0B8576D42438}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingCommons.RestApiClient", "TestingCommons.RestApiClient\TestingCommons.RestApiClient.csproj", "{0B73C05A-D63C-4513-A093-682978CEDB74}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingCommons.UnitTests", "TestingCommons.UnitTests\TestingCommons.UnitTests.csproj", "{587F00C4-5DD6-45CA-93A7-EB3200337094}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingCommons.RabbitMq", "TestingCommons.RabbitMq\TestingCommons.RabbitMq.csproj", "{3BFF4892-4EF9-47AC-AAA5-4859CC098246}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{587F00C4-5DD6-45CA-93A7-EB3200337094}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{587F00C4-5DD6-45CA-93A7-EB3200337094}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{587F00C4-5DD6-45CA-93A7-EB3200337094}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BFF4892-4EF9-47AC-AAA5-4859CC098246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BFF4892-4EF9-47AC-AAA5-4859CC098246}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BFF4892-4EF9-47AC-AAA5-4859CC098246}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BFF4892-4EF9-47AC-AAA5-4859CC098246}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
