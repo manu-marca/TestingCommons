@@ -10,6 +10,11 @@ on:
         description: 'Version to release (e.g., 1.2.3)'
         required: false
         default: ''
+      force_pack:
+        description: 'Force pack all projects (ignore change detection)'
+        required: false
+        default: false
+        type: boolean
    
 jobs:
   build:
@@ -55,27 +60,38 @@ jobs:
     - name: Test
       run: dotnet test src/TestingCommons.UnitTests/TestingCommons.UnitTests.csproj -c Release --no-build
     - name: Pack TestingCommons.Azure
-      if: steps.changes.outputs.azure == 'true'
+      if: steps.changes.outputs.azure == 'true' || inputs.force_pack == true
       run: dotnet pack src/TestingCommons.Azure/TestingCommons.Azure.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
     - name: Pack TestingCommons.Core
-      if: steps.changes.outputs.core == 'true'
+      if: steps.changes.outputs.core == 'true' || inputs.force_pack == true
       run: dotnet pack src/TestingCommons.Core/TestingCommons.Core.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
     - name: Pack TestingCommons.MongoDb
-      if: steps.changes.outputs.mongodb == 'true'
+      if: steps.changes.outputs.mongodb == 'true' || inputs.force_pack == true
       run: dotnet pack src/TestingCommons.MongoDb/TestingCommons.MongoDb.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
     - name: Pack TestingCommons.NewRelic
-      if: steps.changes.outputs.newrelic == 'true'
+      if: steps.changes.outputs.newrelic == 'true' || inputs.force_pack == true
       run: dotnet pack src/TestingCommons.NewRelic/TestingCommons.NewRelic.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
     - name: Pack TestingCommons.Reqnroll
-      if: steps.changes.outputs.reqnroll == 'true'
+      if: steps.changes.outputs.reqnroll == 'true' || inputs.force_pack == true
       run: dotnet pack src/TestingCommons.Reqnroll/TestingCommons.Reqnroll.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
     - name: Pack TestingCommons.RabbitMq
-      if: steps.changes.outputs.rabbitmq == 'true'
+      if: steps.changes.outputs.rabbitmq == 'true' || inputs.force_pack == true
       run: dotnet pack src/TestingCommons.RabbitMq/TestingCommons.RabbitMq.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
     - name: Pack TestingCommons.RestApiClient
-      if: steps.changes.outputs.restapiclient == 'true'
+      if: steps.changes.outputs.restapiclient == 'true' || inputs.force_pack == true
       run: dotnet pack src/TestingCommons.RestApiClient/TestingCommons.RestApiClient.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
+    - name: Check for packages
+      id: check_packages
+      run: |
+        if [ -d "${{ env.NuGetDirectory }}" ] && [ "$(ls -A ${{ env.NuGetDirectory }}/*.nupkg 2>/dev/null | wc -l)" -gt 0 ]; then
+          echo "has_packages=true" >> $GITHUB_OUTPUT
+          echo "Found packages to publish"
+        else
+          echo "has_packages=false" >> $GITHUB_OUTPUT
+          echo "No packages found to publish"
+        fi
     - name: Publish NuGet package
+      if: steps.check_packages.outputs.has_packages == 'true'
       shell: pwsh
       run: |
         foreach($file in (Get-ChildItem "${{ env.NuGetDirectory }}" -Recurse -Include *.nupkg)) {
