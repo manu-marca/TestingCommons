@@ -36,7 +36,6 @@ public class TestContainersSetup : IAsyncDisposable
     {
         _logger.LogInformation("Starting TestContainers...");
 
-        // Start containers in parallel for faster startup
         var tasks = new[]
         {
             StartMongoDbAsync(),

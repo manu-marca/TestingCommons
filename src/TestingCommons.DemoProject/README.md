@@ -19,15 +19,15 @@ TestingCommons.DemoProject/
 ├── Tests/
 │   └── IntegrationTests.cs             # Integration tests with containers
 ├── test-data/                          # Sample test datasets
-│   ├── employees.json                  # Employee data (MongoDB format)
-│   ├── products.json                   # Product data (MongoDB format)
-│   ├── orders.json                     # Order data (MongoDB format)
-│   ├── postgres/                       # PostgreSQL test data
-│   │   ├── complete_dump.sql           # Complete DB dump
-│   │   ├── schema.sql                  # Schema only
-│   │   └── data.sql                    # Data only
-│   └── README.md                       # Test data documentation
-├── BasicTests.cs                       # Basic unit tests
+│   ├── mongo/                          # MongoDB test data
+│   │   ├── employees.json              # Employee data (MongoDB format)
+│   │   ├── products.json               # Product data (MongoDB format)
+│   │   ├── orders.json                 # Order data (MongoDB format)
+│   │   └── README.md                   # MongoDB data documentation
+│   └── postgres/                       # PostgreSQL test data
+│       ├── complete_dump.sql           # Complete DB dump
+│       ├── schema.sql                  # Schema only
+│       └── data.sql                    # Data only
 └── TestingCommons.DemoProject.csproj   # Project configuration
 ```
 
@@ -64,9 +64,10 @@ TestingCommons.DemoProject/
 # Run all tests (will start containers automatically)
 dotnet test
 
-# Run specific test categories
-dotnet test --filter "Category=Integration"
-dotnet test --filter "Category=Unit"
+# Run specific test methods
+dotnet test --filter "MongoDB_CanConnectAndQueryData"
+dotnet test --filter "RabbitMQ_CanConnectAndPublishMessages"
+dotnet test --filter "AllContainers_AreHealthyAndResponsive"
 
 # Run with verbose output
 dotnet test --logger:console;verbosity=detailed
@@ -100,19 +101,22 @@ public class TestContainersSetup : IAsyncDisposable
 ```
 
 ### MongoDB Container
-- **Image**: `mongo:latest`
+- **Image**: `mongo:7.0`
 - **Database**: `testingcommons_db`
 - **Collections**: employees, products, orders
-- **Features**: Automatic JSON import, replica set support
+- **Authentication**: mongoadmin/mongopass
+- **Features**: Automatic JSON import from test-data/mongo/
 
 ### PostgreSQL Container
 - **Image**: `postgres:15`
 - **Database**: `testingcommons_db`
+- **Username**: testuser/testpass
 - **Schema**: Normalized tables with foreign keys
-- **Features**: Custom types, indexes, triggers
+- **Features**: SQL script execution from test-data/postgres/
 
 ### RabbitMQ Container
-- **Image**: `rabbitmq:3-management`
+- **Image**: `rabbitmq:3.12-management`
+- **Username**: rabbitmquser/rabbitmqpass
 - **Management UI**: Available on random port
 - **Features**: Exchanges, queues, bindings pre-configured
 
@@ -121,55 +125,51 @@ public class TestContainersSetup : IAsyncDisposable
 ### Basic Integration Test
 ```csharp
 [Test]
-public async Task MongoDB_CanStoreAndRetrieveData()
+public async Task MongoDB_CanConnectAndQueryData()
 {
-    // Containers are already started in OneTimeSetUp
     var client = new MongoClient(_containers.MongoConnectionString);
     var database = client.GetDatabase("testingcommons_db");
-    var collection = database.GetCollection<Employee>("employees");
+    var employeesCollection = database.GetCollection<dynamic>("employees");
 
-    // Your test logic here
-    var employees = await collection.Find(_ => true).ToListAsync();
-    Assert.That(employees, Is.Not.Empty);
+    var employeeCount = await employeesCollection.CountDocumentsAsync(FilterDefinition<dynamic>.Empty);
+    var employees = await employeesCollection.Find(FilterDefinition<dynamic>.Empty).ToListAsync();
+
+    Assert.That(employeeCount, Is.GreaterThan(0), "Should have employees in the database");
+    Assert.That(employees, Is.Not.Empty, "Should retrieve employee documents");
 }
 ```
 
-### Using TestingCommons.MongoDb
+### RabbitMQ Messaging Test
 ```csharp
 [Test]
-public async Task TestingCommons_MongoClient_Integration()
+public async Task RabbitMQ_CanConnectAndPublishMessages()
 {
-    var client = new MongoDbClientBase(
-        _containers.MongoConnectionString, 
-        "testingcommons_db");
-    
-    // Use TestingCommons abstractions
-    var employees = await client.GetCollectionAsync<Employee>("employees");
-    var activeEmployees = await employees
-        .Find(e => e.IsActive)
-        .ToListAsync();
-    
-    Assert.That(activeEmployees, Is.Not.Empty);
-}
-```
+    var factory = new ConnectionFactory()
+    {
+        HostName = _containers.RabbitMqHost,
+        Port = _containers.RabbitMqPort,
+        UserName = _containers.RabbitMqUsername,
+        Password = _containers.RabbitMqPassword
+    };
 
-### PostgreSQL with Entity Framework
-```csharp
-[Test]
-public async Task PostgreSQL_WithEntityFramework()
-{
-    var options = new DbContextOptionsBuilder<TestDbContext>()
-        .UseNpgsql(_containers.PostgresConnectionString)
-        .Options;
+    await using var connection = await factory.CreateConnectionAsync();
+    await using var channel = await connection.CreateChannelAsync();
+
+    var testMessage = "Test message from integration test";
+    var body = System.Text.Encoding.UTF8.GetBytes(testMessage);
+
+    await channel.BasicPublishAsync(
+        exchange: "testingcommons.events",
+        routingKey: "employees.created",
+        body: body);
+
+    var queueName = "test.employees.created";
+    var result = await channel.BasicGetAsync(queueName, autoAck: true);
+
+    Assert.That(result, Is.Not.Null, "Should receive the published message");
     
-    await using var context = new TestDbContext(options);
-    
-    var departments = await context.Employees
-        .GroupBy(e => e.Department)
-        .Select(g => new { Department = g.Key, Count = g.Count() })
-        .ToListAsync();
-    
-    Assert.That(departments, Is.Not.Empty);
+    var receivedMessage = System.Text.Encoding.UTF8.GetString(result.Body.ToArray());
+    Assert.That(receivedMessage, Is.EqualTo(testMessage), "Message content should match");
 }
 ```
 
@@ -184,9 +184,9 @@ public async Task PostgreSQL_WithEntityFramework()
 ### MongoDB Collections
 ```json
 {
-  "employees": "Employee profiles with skills and projects",
-  "products": "Product catalog with specifications and reviews", 
-  "orders": "Order history with items and payment details"
+  "employees": "Employee profiles with skills and projects (5 records)",
+  "products": "Product catalog with specifications and reviews (4 records)", 
+  "orders": "Order history with items and payment details (3 records)"
 }
 ```
 
@@ -227,12 +227,15 @@ public async Task Setup() => await _containers.StartContainersAsync();
 [OneTimeTearDown] 
 public async Task Cleanup() => await _containers.DisposeAsync();
 
-// Use fast test data
-[Test, Category("Fast")]
-public void UnitTest_WithoutContainers() { /* ... */ }
+// All tests use the same container instances
+[Test]
+public async Task MongoDB_CanConnectAndQueryData() { /* ... */ }
 
-[Test, Category("Integration")]
-public async Task IntegrationTest_WithContainers() { /* ... */ }
+[Test]
+public async Task RabbitMQ_CanConnectAndPublishMessages() { /* ... */ }
+
+[Test]
+public async Task AllContainers_AreHealthyAndResponsive() { /* ... */ }
 ```
 
 ## Troubleshooting
@@ -284,7 +287,7 @@ await containers.StartContainersAsync();
     docker-compose --version
 
 - name: Run Integration Tests  
-  run: dotnet test --filter "Category=Integration"
+  run: dotnet test
   env:
     DOCKER_HOST: tcp://localhost:2376
 ```
@@ -294,7 +297,7 @@ await containers.StartContainersAsync();
 - task: DockerInstaller@0
   displayName: 'Install Docker'
 
-- script: dotnet test --filter "Category=Integration"
+- script: dotnet test
   displayName: 'Run Integration Tests'
 ```
 
