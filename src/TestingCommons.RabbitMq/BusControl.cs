@@ -14,6 +14,25 @@ namespace TestingCommons.RabbitMq
                 configureAction?.Invoke(configure);
             });
 
+        public static IBusControl InitializeWithConsumers(RabbitMqConfig rabbitMqConfiguration, 
+            Dictionary<string, Action<IRabbitMqReceiveEndpointConfigurator>> receiveEndpointConfigurations = null,
+            Action<IRabbitMqBusFactoryConfigurator> additionalConfiguration = null)
+            => Bus.Factory.CreateUsingRabbitMq(configure =>
+            {
+                configure.ConfigureRabbitMq(rabbitMqConfiguration);
+                
+                // Configure receive endpoints for consumers
+                if (receiveEndpointConfigurations != null)
+                {
+                    foreach (var endpointConfig in receiveEndpointConfigurations)
+                    {
+                        configure.ReceiveEndpoint(endpointConfig.Key, endpointConfig.Value);
+                    }
+                }
+                
+                additionalConfiguration?.Invoke(configure);
+            });
+
         public static void ConfigureRabbitMq(this IRabbitMqBusFactoryConfigurator configure, RabbitMqConfig rabbitMqConfiguration)
         {
             ConfigureHost(rabbitMqConfiguration, configure);
