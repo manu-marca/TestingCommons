@@ -34,6 +34,16 @@ jobs:
     - name: Determine Version
       uses: gittools/actions/gitversion/execute@v0.9.7
       id: gitversion
+    - name: Set Final Version
+      id: final_version
+      run: |
+        if [ -n "${{ inputs.version }}" ]; then
+          echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+          echo "Using manual version: ${{ inputs.version }}"
+        else
+          echo "version=${{ steps.gitversion.outputs.nuGetVersionV2 }}" >> $GITHUB_OUTPUT
+          echo "Using GitVersion: ${{ steps.gitversion.outputs.nuGetVersionV2 }}"
+        fi
     - name: Detect Changes
       uses: dorny/paths-filter@v2
       id: changes
@@ -61,25 +71,25 @@ jobs:
       run: dotnet test src/TestingCommons.UnitTests/TestingCommons.UnitTests.csproj -c Release --no-build
     - name: Pack TestingCommons.Azure
       if: steps.changes.outputs.azure == 'true' || inputs.force_pack == true
-      run: dotnet pack src/TestingCommons.Azure/TestingCommons.Azure.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
+      run: dotnet pack src/TestingCommons.Azure/TestingCommons.Azure.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.final_version.outputs.version }}
     - name: Pack TestingCommons.Core
       if: steps.changes.outputs.core == 'true' || inputs.force_pack == true
-      run: dotnet pack src/TestingCommons.Core/TestingCommons.Core.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
+      run: dotnet pack src/TestingCommons.Core/TestingCommons.Core.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.final_version.outputs.version }}
     - name: Pack TestingCommons.MongoDb
       if: steps.changes.outputs.mongodb == 'true' || inputs.force_pack == true
-      run: dotnet pack src/TestingCommons.MongoDb/TestingCommons.MongoDb.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
+      run: dotnet pack src/TestingCommons.MongoDb/TestingCommons.MongoDb.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.final_version.outputs.version }}
     - name: Pack TestingCommons.NewRelic
       if: steps.changes.outputs.newrelic == 'true' || inputs.force_pack == true
-      run: dotnet pack src/TestingCommons.NewRelic/TestingCommons.NewRelic.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
+      run: dotnet pack src/TestingCommons.NewRelic/TestingCommons.NewRelic.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.final_version.outputs.version }}
     - name: Pack TestingCommons.Reqnroll
       if: steps.changes.outputs.reqnroll == 'true' || inputs.force_pack == true
-      run: dotnet pack src/TestingCommons.Reqnroll/TestingCommons.Reqnroll.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
+      run: dotnet pack src/TestingCommons.Reqnroll/TestingCommons.Reqnroll.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.final_version.outputs.version }}
     - name: Pack TestingCommons.RabbitMq
       if: steps.changes.outputs.rabbitmq == 'true' || inputs.force_pack == true
-      run: dotnet pack src/TestingCommons.RabbitMq/TestingCommons.RabbitMq.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
+      run: dotnet pack src/TestingCommons.RabbitMq/TestingCommons.RabbitMq.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.final_version.outputs.version }}
     - name: Pack TestingCommons.RestApiClient
       if: steps.changes.outputs.restapiclient == 'true' || inputs.force_pack == true
-      run: dotnet pack src/TestingCommons.RestApiClient/TestingCommons.RestApiClient.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
+      run: dotnet pack src/TestingCommons.RestApiClient/TestingCommons.RestApiClient.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.final_version.outputs.version }}
     - name: Check for packages
       id: check_packages
       run: |
