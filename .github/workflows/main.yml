@@ -35,8 +35,7 @@ jobs:
       run: dotnet build src/TestingCommons.sln -c Release 
     - name: Test
       run: dotnet test src/TestingCommons.UnitTests/TestingCommons.UnitTests.csproj -c Release --no-build
-        - name: Pack nugets
-    
+    - name: Pack nugets
       run: dotnet pack src/TestingCommons.Azure/TestingCommons.Azure.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
     - name: Pack nugets
       run: dotnet pack src/TestingCommons.Core/TestingCommons.Core.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
