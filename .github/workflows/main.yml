@@ -29,25 +29,51 @@ jobs:
     - name: Determine Version
       uses: gittools/actions/gitversion/execute@v0.9.7
       id: gitversion
+    - name: Detect Changes
+      uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          azure:
+            - 'src/TestingCommons.Azure/**'
+          core:
+            - 'src/TestingCommons.Core/**'
+          mongodb:
+            - 'src/TestingCommons.MongoDb/**'
+          newrelic:
+            - 'src/TestingCommons.NewRelic/**'
+          reqnroll:
+            - 'src/TestingCommons.Reqnroll/**'
+          rabbitmq:
+            - 'src/TestingCommons.RabbitMq/**'
+          restapiclient:
+            - 'src/TestingCommons.RestApiClient/**'
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v1
     - name: Build
       run: dotnet build src/TestingCommons.sln -c Release 
     - name: Test
       run: dotnet test src/TestingCommons.UnitTests/TestingCommons.UnitTests.csproj -c Release --no-build
-    - name: Pack nugets
+    - name: Pack TestingCommons.Azure
+      if: steps.changes.outputs.azure == 'true'
       run: dotnet pack src/TestingCommons.Azure/TestingCommons.Azure.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
-    - name: Pack nugets
+    - name: Pack TestingCommons.Core
+      if: steps.changes.outputs.core == 'true'
       run: dotnet pack src/TestingCommons.Core/TestingCommons.Core.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
-    - name: Pack nugets
+    - name: Pack TestingCommons.MongoDb
+      if: steps.changes.outputs.mongodb == 'true'
       run: dotnet pack src/TestingCommons.MongoDb/TestingCommons.MongoDb.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
-    - name: Pack nugets
+    - name: Pack TestingCommons.NewRelic
+      if: steps.changes.outputs.newrelic == 'true'
       run: dotnet pack src/TestingCommons.NewRelic/TestingCommons.NewRelic.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
-    - name: Pack nugets
+    - name: Pack TestingCommons.Reqnroll
+      if: steps.changes.outputs.reqnroll == 'true'
       run: dotnet pack src/TestingCommons.Reqnroll/TestingCommons.Reqnroll.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
-    - name: Pack nugets
+    - name: Pack TestingCommons.RabbitMq
+      if: steps.changes.outputs.rabbitmq == 'true'
       run: dotnet pack src/TestingCommons.RabbitMq/TestingCommons.RabbitMq.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
-    - name: Pack nugets
+    - name: Pack TestingCommons.RestApiClient
+      if: steps.changes.outputs.restapiclient == 'true'
       run: dotnet pack src/TestingCommons.RestApiClient/TestingCommons.RestApiClient.csproj -c Release --no-build --output ${{ env.NuGetDirectory }} -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}
     - name: Publish NuGet package
       shell: pwsh
