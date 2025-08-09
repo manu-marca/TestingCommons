@@ -6,55 +6,42 @@ branches:
     increment: Patch
     prevent-increment-of-merged-branch-version: true
     track-merge-target: false
-    source-branches: ['develop', 'release']
   develop:
     regex: ^develop$
     mode: ContinuousDeployment
     increment: Minor
     prevent-increment-of-merged-branch-version: false
     track-merge-target: true
-    source-branches: []
   release:
     regex: ^releases?[/-]
     mode: ContinuousDelivery
     increment: None
     prevent-increment-of-merged-branch-version: true
     track-merge-target: false
-    source-branches: ['develop', 'main', 'support', 'release']
   feature:
     regex: ^features?[/-]
     mode: ContinuousDeployment
     increment: Inherit
     prevent-increment-of-merged-branch-version: false
     track-merge-target: false
-    source-branches: ['develop', 'main', 'release', 'feature', 'support', 'hotfix']
   pull-request:
     regex: ^(pull|pull\-requests|pr)[/-]
     mode: ContinuousDeployment
     increment: Inherit
     prevent-increment-of-merged-branch-version: false
     track-merge-target: false
-    source-branches: ['develop', 'main', 'release', 'feature', 'support', 'hotfix']
   hotfix:
     regex: ^hotfix(es)?[/-]
     mode: ContinuousDeployment
     increment: Patch
     prevent-increment-of-merged-branch-version: false
     track-merge-target: false
-    source-branches: ['release', 'main', 'support', 'hotfix']
   support:
     regex: ^support[/-]
     mode: ContinuousDelivery
     increment: Patch
     prevent-increment-of-merged-branch-version: true
     track-merge-target: false
-    source-branches: ['main']
 ignore:
   sha: []
 increment: Inherit
-commit-message-incrementing:
-  bump-message: '\+semver:\s?(breaking|major)'
-  patch-message: '\+semver:\s?(fix|patch)'
-  minor-message: '\+semver:\s?(feature|minor)'
-  no-bump-message: '\+semver:\s?(none|skip)'
-merge-message-formats: {}
