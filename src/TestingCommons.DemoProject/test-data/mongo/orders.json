@@ -1,0 +1,143 @@
+[
+  {
+    "_id": {
+      "$oid": "64a1b2c3d4e5f6789abc0001"
+    },
+    "orderId": "ORD-2023-001",
+    "customerId": "507f1f77bcf86cd799439011",
+    "orderDate": {
+      "$date": "2023-05-15T14:30:00.000Z"
+    },
+    "status": "delivered",
+    "totalAmount": 179.98,
+    "shippingAddress": {
+      "street": "123 Main St",
+      "city": "New York",
+      "state": "NY",
+      "zipCode": "10001",
+      "country": "USA"
+    },
+    "items": [
+      {
+        "productId": "60d5ec49f1b2c72e4c8b4567",
+        "productName": "Wireless Headphones",
+        "quantity": 1,
+        "unitPrice": 99.99,
+        "totalPrice": 99.99
+      },
+      {
+        "productId": "60d5ec49f1b2c72e4c8b456a",
+        "productName": "Bluetooth Speaker",
+        "quantity": 1,
+        "unitPrice": 79.99,
+        "totalPrice": 79.99
+      }
+    ],
+    "payment": {
+      "method": "credit_card",
+      "status": "paid",
+      "transactionId": "txn_abc123def456",
+      "paidDate": {
+        "$date": "2023-05-15T14:32:00.000Z"
+      }
+    },
+    "shipping": {
+      "method": "standard",
+      "cost": 9.99,
+      "estimatedDelivery": {
+        "$date": "2023-05-20T00:00:00.000Z"
+      },
+      "actualDelivery": {
+        "$date": "2023-05-19T16:45:00.000Z"
+      },
+      "trackingNumber": "1Z999AA1234567890"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "64a1b2c3d4e5f6789abc0002"
+    },
+    "orderId": "ORD-2023-002",
+    "customerId": "507f1f77bcf86cd799439012",
+    "orderDate": {
+      "$date": "2023-06-02T10:15:00.000Z"
+    },
+    "status": "shipped",
+    "totalAmount": 259.98,
+    "shippingAddress": {
+      "street": "456 Oak Ave",
+      "city": "San Francisco",
+      "state": "CA",
+      "zipCode": "94102",
+      "country": "USA"
+    },
+    "items": [
+      {
+        "productId": "60d5ec49f1b2c72e4c8b4568",
+        "productName": "Smart Watch",
+        "quantity": 1,
+        "unitPrice": 249.99,
+        "totalPrice": 249.99
+      }
+    ],
+    "payment": {
+      "method": "paypal",
+      "status": "paid",
+      "transactionId": "txn_xyz789ghi012",
+      "paidDate": {
+        "$date": "2023-06-02T10:17:00.000Z"
+      }
+    },
+    "shipping": {
+      "method": "express",
+      "cost": 19.99,
+      "estimatedDelivery": {
+        "$date": "2023-06-05T00:00:00.000Z"
+      },
+      "trackingNumber": "1Z999BB9876543210"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "64a1b2c3d4e5f6789abc0003"
+    },
+    "orderId": "ORD-2023-003",
+    "customerId": "507f1f77bcf86cd799439015",
+    "orderDate": {
+      "$date": "2023-06-10T09:00:00.000Z"
+    },
+    "status": "processing",
+    "totalAmount": 89.98,
+    "shippingAddress": {
+      "street": "654 Maple Dr",
+      "city": "Denver",
+      "state": "CO",
+      "zipCode": "80201",
+      "country": "USA"
+    },
+    "items": [
+      {
+        "productId": "60d5ec49f1b2c72e4c8b456a",
+        "productName": "Bluetooth Speaker",
+        "quantity": 1,
+        "unitPrice": 79.99,
+        "totalPrice": 79.99
+      }
+    ],
+    "payment": {
+      "method": "credit_card",
+      "status": "paid",
+      "transactionId": "txn_mno345pqr678",
+      "paidDate": {
+        "$date": "2023-06-10T09:02:00.000Z"
+      }
+    },
+    "shipping": {
+      "method": "standard",
+      "cost": 9.99,
+      "estimatedDelivery": {
+        "$date": "2023-06-15T00:00:00.000Z"
+      }
+    }
+  }
+]

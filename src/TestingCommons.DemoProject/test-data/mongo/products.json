@@ -1,0 +1,129 @@
+[
+  {
+    "_id": {
+      "$oid": "60d5ec49f1b2c72e4c8b4567"
+    },
+    "productName": "Wireless Headphones",
+    "category": "Electronics",
+    "price": 99.99,
+    "inStock": true,
+    "quantity": 150,
+    "description": "High-quality wireless headphones with noise cancellation",
+    "manufacturer": "TechCorp",
+    "releaseDate": {
+      "$date": "2023-01-10T00:00:00.000Z"
+    },
+    "tags": ["wireless", "audio", "bluetooth", "noise-cancelling"],
+    "specifications": {
+      "batteryLife": "24 hours",
+      "range": "30 feet",
+      "weight": "250g",
+      "color": "Black"
+    },
+    "reviews": [
+      {
+        "userId": "507f1f77bcf86cd799439011",
+        "rating": 5,
+        "comment": "Excellent sound quality!",
+        "date": {
+          "$date": "2023-02-15T10:30:00.000Z"
+        }
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "60d5ec49f1b2c72e4c8b4568"
+    },
+    "productName": "Smart Watch",
+    "category": "Wearables",
+    "price": 249.99,
+    "inStock": true,
+    "quantity": 75,
+    "description": "Feature-rich smartwatch with health monitoring",
+    "manufacturer": "WearTech",
+    "releaseDate": {
+      "$date": "2023-03-05T00:00:00.000Z"
+    },
+    "tags": ["smartwatch", "fitness", "health", "notifications"],
+    "specifications": {
+      "batteryLife": "7 days",
+      "display": "1.4 inch AMOLED",
+      "waterResistant": true,
+      "heartRateMonitor": true
+    },
+    "reviews": [
+      {
+        "userId": "507f1f77bcf86cd799439012",
+        "rating": 4,
+        "comment": "Great features, good battery life",
+        "date": {
+          "$date": "2023-04-01T14:20:00.000Z"
+        }
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "60d5ec49f1b2c72e4c8b4569"
+    },
+    "productName": "Gaming Keyboard",
+    "category": "Computer Accessories",
+    "price": 129.99,
+    "inStock": false,
+    "quantity": 0,
+    "description": "Mechanical gaming keyboard with RGB lighting",
+    "manufacturer": "GameGear",
+    "releaseDate": {
+      "$date": "2022-11-20T00:00:00.000Z"
+    },
+    "tags": ["gaming", "mechanical", "rgb", "keyboard"],
+    "specifications": {
+      "switchType": "Cherry MX Blue",
+      "backlight": "RGB",
+      "connectivity": "USB-C",
+      "keyLayout": "Full Size"
+    },
+    "reviews": []
+  },
+  {
+    "_id": {
+      "$oid": "60d5ec49f1b2c72e4c8b456a"
+    },
+    "productName": "Bluetooth Speaker",
+    "category": "Electronics",
+    "price": 79.99,
+    "inStock": true,
+    "quantity": 200,
+    "description": "Portable Bluetooth speaker with excellent bass",
+    "manufacturer": "SoundWave",
+    "releaseDate": {
+      "$date": "2023-02-28T00:00:00.000Z"
+    },
+    "tags": ["bluetooth", "portable", "speaker", "bass"],
+    "specifications": {
+      "batteryLife": "12 hours",
+      "range": "33 feet",
+      "waterproof": "IPX7",
+      "power": "20W"
+    },
+    "reviews": [
+      {
+        "userId": "507f1f77bcf86cd799439014",
+        "rating": 5,
+        "comment": "Amazing sound for the price!",
+        "date": {
+          "$date": "2023-03-20T09:15:00.000Z"
+        }
+      },
+      {
+        "userId": "507f1f77bcf86cd799439015",
+        "rating": 4,
+        "comment": "Very portable and good quality",
+        "date": {
+          "$date": "2023-04-10T16:45:00.000Z"
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,166 @@
+[
+  {
+    "_id": {
+      "$oid": "507f1f77bcf86cd799439011"
+    },
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "age": 29,
+    "isActive": true,
+    "department": "Engineering",
+    "salary": 75000,
+    "joinDate": {
+      "$date": "2023-01-15T09:00:00.000Z"
+    },
+    "address": {
+      "street": "123 Main St",
+      "city": "New York",
+      "state": "NY",
+      "zipCode": "10001"
+    },
+    "skills": ["C#", ".NET", "MongoDB", "Azure"],
+    "projects": [
+      {
+        "name": "TestingCommons",
+        "role": "Lead Developer",
+        "startDate": {
+          "$date": "2023-02-01T00:00:00.000Z"
+        }
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "507f1f77bcf86cd799439012"
+    },
+    "name": "Jane Smith",
+    "email": "jane.smith@example.com",
+    "age": 32,
+    "isActive": true,
+    "department": "Product",
+    "salary": 85000,
+    "joinDate": {
+      "$date": "2022-08-20T09:00:00.000Z"
+    },
+    "address": {
+      "street": "456 Oak Ave",
+      "city": "San Francisco",
+      "state": "CA",
+      "zipCode": "94102"
+    },
+    "skills": ["Product Management", "Agile", "SQL", "Analytics"],
+    "projects": [
+      {
+        "name": "User Dashboard",
+        "role": "Product Owner",
+        "startDate": {
+          "$date": "2022-09-01T00:00:00.000Z"
+        }
+      },
+      {
+        "name": "API Gateway",
+        "role": "Stakeholder",
+        "startDate": {
+          "$date": "2023-03-15T00:00:00.000Z"
+        }
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "507f1f77bcf86cd799439013"
+    },
+    "name": "Mike Johnson",
+    "email": "mike.johnson@example.com",
+    "age": 27,
+    "isActive": false,
+    "department": "Engineering",
+    "salary": 68000,
+    "joinDate": {
+      "$date": "2023-06-10T09:00:00.000Z"
+    },
+    "address": {
+      "street": "789 Pine Rd",
+      "city": "Austin",
+      "state": "TX",
+      "zipCode": "73301"
+    },
+    "skills": ["JavaScript", "React", "Node.js", "Docker"],
+    "projects": [
+      {
+        "name": "Frontend Redesign",
+        "role": "Frontend Developer",
+        "startDate": {
+          "$date": "2023-07-01T00:00:00.000Z"
+        }
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "507f1f77bcf86cd799439014"
+    },
+    "name": "Sarah Wilson",
+    "email": "sarah.wilson@example.com",
+    "age": 35,
+    "isActive": true,
+    "department": "DevOps",
+    "salary": 95000,
+    "joinDate": {
+      "$date": "2021-11-05T09:00:00.000Z"
+    },
+    "address": {
+      "street": "321 Elm St",
+      "city": "Seattle",
+      "state": "WA",
+      "zipCode": "98101"
+    },
+    "skills": ["AWS", "Kubernetes", "Terraform", "CI/CD", "MongoDB"],
+    "projects": [
+      {
+        "name": "Infrastructure Migration",
+        "role": "DevOps Lead",
+        "startDate": {
+          "$date": "2022-01-01T00:00:00.000Z"
+        }
+      },
+      {
+        "name": "Monitoring Setup",
+        "role": "Technical Lead",
+        "startDate": {
+          "$date": "2023-04-01T00:00:00.000Z"
+        }
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "507f1f77bcf86cd799439015"
+    },
+    "name": "David Brown",
+    "email": "david.brown@example.com",
+    "age": 28,
+    "isActive": true,
+    "department": "QA",
+    "salary": 62000,
+    "joinDate": {
+      "$date": "2023-03-01T09:00:00.000Z"
+    },
+    "address": {
+      "street": "654 Maple Dr",
+      "city": "Denver",
+      "state": "CO",
+      "zipCode": "80201"
+    },
+    "skills": ["Test Automation", "Selenium", "C#", "API Testing"],
+    "projects": [
+      {
+        "name": "Test Automation Framework",
+        "role": "QA Engineer",
+        "startDate": {
+          "$date": "2023-03-15T00:00:00.000Z"
+        }
+      }
+    ]
+  }
+]

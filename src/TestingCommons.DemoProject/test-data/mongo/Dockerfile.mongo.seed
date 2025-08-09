@@ -1,0 +1,6 @@
+FROM mongo:latest
+
+COPY ./tools/database/orders.json  /orders.json
+COPY ./tools/database/employees.json  /employees.json
+COPY ./tools/database/products.json  /products.json
+CMD mongoimport mongodb://mongoadmin:mongopass@mongodb:27017 --authenticationDatabase admin --db test_database --collection merchant --type json --file /init.json --jsonArray
